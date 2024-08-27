@@ -1,44 +1,34 @@
-const db = require('../db/db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const db = require('../db');
 
-exports.register = async (req, res) => {
-  const { username, email, password } = req.body;
+exports.register = (req, res) => {
+    const { username, password } = req.body;
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    
+    db.query('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashedPassword], (err, results) => {
+        if (err) return res.status(500).send(err);
 
-  try {
-    const [rows] = await db.query('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', [username, email, hashedPassword]);
-
-    const token = jwt.sign({ userId: rows.insertId, username }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-    res.status(201).json({ token, username });
-  } catch (err) {
-    res.status(500).json({ error: 'Database error' });
-  }
+        res.status(201).send('User registered');
+    });
 };
 
-exports.login = async (req, res) => {
-  const { email, password } = req.body;
+exports.login = (req, res) => {
+    const { username, password } = req.body;
 
-  try {
-    const [rows] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+    db.query('SELECT * FROM users WHERE username = ?', [username], (err, results) => {
+        if (err) return res.status(500).send(err);
 
-    if (rows.length === 0) {
-      return res.status(400).json({ error: 'User not found' });
-    }
+        if (results.length === 0) return res.status(404).send('User not found');
 
-    const user = rows[0];
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+        const user = results[0];
+        const isPasswordValid = bcrypt.compareSync(password, user.password);
 
-    if (!isPasswordValid) {
-      return res.status(400).json({ error: 'Invalid password' });
-    }
+        if (!isPasswordValid) return res.status(401).send('Invalid password');
 
-    const token = jwt.sign({ userId: user.id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    res.json({ token, username: user.username });
-  } catch (err) {
-    res.status(500).json({ error: 'Database error' });
-  }
+        res.status(200).json({ token });
+    });
 };
