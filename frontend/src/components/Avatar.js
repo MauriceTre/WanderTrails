@@ -34,7 +34,9 @@ const Avatar = ({ avatarUrl, onAvatarChange }) => {
         <button onClick={() => setShowPredefined(true)}>Predefined</button>
         <button onClick={() => setShowPredefined(false)}>Custom</button>
       </div>
-      <div className={`avatar-display ${showPredefined ? 'show-predefined' : 'show-custom'}`}>
+      <div
+        className={`avatar-display ${showPredefined ? 'show-predefined' : 'show-custom'}`}
+      >
         {showPredefined ? (
           <div className="predefined-avatars">
             {predefinedAvatars.map((url, index) => (
@@ -43,14 +45,28 @@ const Avatar = ({ avatarUrl, onAvatarChange }) => {
                 className={`avatar-button ${avatarUrl === url ? 'selected' : ''}`}
                 onClick={() => handleAvatarChange(url)}
               >
-                <img src={url} alt={`Avatar ${index + 1}`} className={`avatar-image ${avatarUrl === url ? 'visible' : 'hidden'}`} />
+                <img
+                  src={url}
+                  alt={`Avatar ${index + 1}`}
+                  className={`avatar-image ${avatarUrl === url ? 'visible' : 'hidden'}`}
+                />
               </button>
             ))}
           </div>
         ) : (
           <div className="custom-avatar-upload">
-            <input type="file" accept="image/*" onChange={handleCustomAvatarUpload} />
-            {customAvatar && <img src={customAvatar} alt="Custom Avatar" className="avatar-image visible" />}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleCustomAvatarUpload}
+            />
+            {customAvatar && (
+              <img
+                src={customAvatar}
+                alt="Custom Avatar"
+                className="avatar-image visible"
+              />
+            )}
           </div>
         )}
       </div>
@@ -59,5 +75,3 @@ const Avatar = ({ avatarUrl, onAvatarChange }) => {
 };
 
 export default Avatar;
-
-
