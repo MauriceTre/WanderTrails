@@ -5,9 +5,10 @@
     "main": "src/server.js",
     "scripts": {
         "start": "node src/server.js",
-        "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
-        "lint:fix": "eslint 'src/**/*.{js,jsx,ts,tsx}' --fix",
-        "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,json,css}'"
+        "lint": "eslint 'src/**/*.{js,jsx}'",
+        "lint:fix": "eslint 'src/**/*.{js,jsx}' --fix",
+        "prettier": "prettier --check .",
+        "prettier:fix": "prettier --write ."
     },
     "dependencies": {
         "bcrypt": "^5.1.1",
