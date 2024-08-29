@@ -27,4 +27,16 @@ export default [...compat.extends("eslint:recommended"), {
         "no-unused-vars": "warn",
         "no-console": "off",
     },
+    parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: 'module', // Dies stellt sicher, dass ESLint den Code als ECMAScript-Modul behandelt
+    },
+    env: {
+        es6: true,
+        node: true,
+    },
+    extends: [
+        'eslint:recommended',
+        'plugin:prettier/recommended'
+    ],
 }];
