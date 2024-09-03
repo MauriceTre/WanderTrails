@@ -1,5 +1,6 @@
 // src/components/Avatar.js
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 const predefinedAvatars = [
   '/avatars/avatar1.png',
@@ -14,6 +15,10 @@ const Avatar = ({ avatarUrl, onAvatarChange }) => {
 
   const handleAvatarChange = (newAvatarUrl) => {
     onAvatarChange(newAvatarUrl);
+  };
+  Avatar.propTypes = {
+    avatarUrl: PropTypes.string.isRequired,
+    onAvatarChange: PropTypes.func.isRequired,
   };
 
   const handleCustomAvatarUpload = (e) => {
