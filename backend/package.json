@@ -4,11 +4,7 @@
     "description": "Backend for Wander App",
     "main": "src/server.js",
     "scripts": {
-        "start": "node src/server.js",
-        "lint": "eslint \"src/**/*.{js,jsx}\"",
-        "lint:fix": "eslint 'src/**/*.{js,jsx}' --fix",
-        "prettier": "prettier --check .",
-        "prettier:fix": "prettier --write ."
+        "start": "node src/server.js"
     },
     "dependencies": {
         "bcrypt": "^5.1.1",
@@ -18,12 +14,5 @@
         "express": "^4.19.2",
         "jsonwebtoken": "^8.5.1",
         "mysql2": "^2.3.3"
-    },
-    "devDependencies": {
-        "eslint": "^9.9.1",
-        "eslint-config-prettier": "^9.1.0",
-        "eslint-plugin-node": "^11.1.0",
-        "eslint-plugin-prettier": "^5.2.1",
-        "prettier": "^3.3.3"
     }
 }

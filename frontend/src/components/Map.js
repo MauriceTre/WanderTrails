@@ -1,5 +1,5 @@
 // src/components/Map.js
-import React from 'react';
+import React, { useState } from 'react';
 import {
   MapContainer,
   TileLayer,
@@ -9,7 +9,6 @@ import {
   useMapEvents,
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import PropTypes from 'prop-types';
 // Zentrale Koordinaten für Deutschland
 const defaultCenter = [51.1657, 10.4515]; // Deutschland Koordinaten
 const defaultZoom = 6; // Zoom Level
@@ -25,16 +24,7 @@ function LocationMarker({ addMarker }) {
 
   return null;
 }
-Map.propTypes = {
-  markers: PropTypes.arrayOf(
-    PropTypes.shape({
-      lat: PropTypes.number.isRequired,
-      lng: PropTypes.number.isRequired,
-    })
-  ).isRequired,
-  onAddMarker: PropTypes.func.isRequired,
-  addMarker: PropTypes.func.isRequired,
-};
+
 const Map = ({ markers, onAddMarker }) => {
   return (
     <MapContainer
