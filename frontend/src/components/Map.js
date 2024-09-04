@@ -1,9 +1,14 @@
 // src/components/Map.js
 import React, { useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Polyline, useMapEvents } from 'react-leaflet';
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  Polyline,
+  useMapEvents,
+} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
-
 // Zentrale Koordinaten für Deutschland
 const defaultCenter = [51.1657, 10.4515]; // Deutschland Koordinaten
 const defaultZoom = 6; // Zoom Level
@@ -22,7 +27,11 @@ function LocationMarker({ addMarker }) {
 
 const Map = ({ markers, onAddMarker }) => {
   return (
-    <MapContainer center={defaultCenter} zoom={defaultZoom} style={{ height: "500px", width: "100%" }}>
+    <MapContainer
+      center={defaultCenter}
+      zoom={defaultZoom}
+      style={{ height: '500px', width: '100%' }}
+    >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -33,8 +42,10 @@ const Map = ({ markers, onAddMarker }) => {
           {markers.map((position, index) => (
             <Marker key={index} position={position}>
               <Popup>
-                Punkt {index + 1}<br />
-                {`Latitude: ${position[0]}`}<br />
+                Punkt {index + 1}
+                <br />
+                {`Latitude: ${position[0]}`}
+                <br />
                 {`Longitude: ${position[1]}`}
               </Popup>
             </Marker>
@@ -47,4 +58,3 @@ const Map = ({ markers, onAddMarker }) => {
 };
 
 export default Map;
-

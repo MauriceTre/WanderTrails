@@ -12,11 +12,14 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/register', {
-        username,
-        email,
-        password,
-      });
+      const response = await axios.post(
+        'http://localhost:5000/api/auth/register',
+        {
+          username,
+          email,
+          password,
+        }
+      );
 
       if (response.status === 201) {
         localStorage.setItem('user', JSON.stringify(response.data));
@@ -58,7 +61,7 @@ const Register = () => {
             required
           />
         </div>
-        <Button type="submit">Register</Button> 
+        <Button type="submit">Register</Button>
       </form>
     </div>
   );

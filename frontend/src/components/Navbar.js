@@ -18,7 +18,7 @@ function Navbar() {
           <Link to="/dashboard">Dashboard</Link>
         </li>
         <li>
-        <Link to="/wanderwege">Wanderwege</Link>
+          <Link to="/wanderwege">Wanderwege</Link>
         </li>
       </ul>
     </nav>

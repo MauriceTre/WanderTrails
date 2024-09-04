@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import Map from '../components/Map';
 
-
 const WanderwegePage = () => {
   const [markers, setMarkers] = useState([]);
 
@@ -19,7 +18,8 @@ const WanderwegePage = () => {
         <ul>
           {markers.map((position, index) => (
             <li key={index}>
-              Wanderweg {index + 1}: Latitude {position[0]}, Longitude {position[1]}
+              Wanderweg {index + 1}: Latitude {position[0]}, Longitude{' '}
+              {position[1]}
             </li>
           ))}
         </ul>

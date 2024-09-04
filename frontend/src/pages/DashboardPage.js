@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import Avatar from '../components/Avatar';
 import { getSavedHikingTrails } from '../utils/wanderwege';
 
-
 const DashboardPage = () => {
   const [user, setUser] = useState({
     name: '',
@@ -79,4 +78,3 @@ const DashboardPage = () => {
 };
 
 export default DashboardPage;
-
