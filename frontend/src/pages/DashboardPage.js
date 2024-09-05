@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Avatar from '../components/Avatar';
 import { getSavedHikingTrails } from '../utils/wanderwege';
-
+import { getDashboard } from '../services/authService';
 const DashboardPage = () => {
   const [user, setUser] = useState({
     name: '',
@@ -11,6 +11,13 @@ const DashboardPage = () => {
     avatarUrl: '',
   });
   const [trails, setTrails] = useState([]);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    getDashboard(token).then((data) => {
+      setRoutes(data.routes);
+    });
+  }, []);
 
   useEffect(() => {
     // Fetch saved hiking trails from the backend or local storage

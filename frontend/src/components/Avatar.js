@@ -16,10 +16,6 @@ const Avatar = ({ avatarUrl, onAvatarChange }) => {
   const handleAvatarChange = (newAvatarUrl) => {
     onAvatarChange(newAvatarUrl);
   };
-  Avatar.propTypes = {
-    avatarUrl: PropTypes.string.isRequired,
-    onAvatarChange: PropTypes.func.isRequired,
-  };
 
   const handleCustomAvatarUpload = (e) => {
     const file = e.target.files[0];
