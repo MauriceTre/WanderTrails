@@ -1,8 +1,9 @@
 // src/pages/DashboardPage.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, setRoutes } from 'react';
 import Avatar from '../components/Avatar';
 import { getSavedHikingTrails } from '../utils/wanderwege';
 import { getDashboard } from '../services/authService';
+
 const DashboardPage = () => {
   const [user, setUser] = useState({
     name: '',

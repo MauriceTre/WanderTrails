@@ -39,6 +39,8 @@ const LandingPage = () => {
         toast.error('Registration failed!');
       }
     } catch (error) {
+      console.log (error)
+      console.log(formData)
       toast.error('Error occurred during registration.');
     }
   };
