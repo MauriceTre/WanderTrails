@@ -1,4 +1,3 @@
-// src/components/Avatar.js
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
@@ -10,19 +9,19 @@ const predefinedAvatars = [
 ];
 
 const Avatar = ({ avatarUrl, onAvatarChange }) => {
-  const [showPredefined, setShowPredefined] = useState(true);
-  const [customAvatar, setCustomAvatar] = useState('');
+  const [showAvatarSelection, setShowAvatarSelection] = useState(false); // Auswahloptionen anzeigen oder verbergen
 
   const handleAvatarChange = (newAvatarUrl) => {
     onAvatarChange(newAvatarUrl);
+    setShowAvatarSelection(false); // Verberge die Auswahloptionen nach Auswahl
   };
 
   const handleCustomAvatarUpload = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.onloadend = () => {
-      setCustomAvatar(reader.result);
       onAvatarChange(reader.result);
+      setShowAvatarSelection(false); // Verberge die Auswahloptionen nach Upload
     };
     if (file) {
       reader.readAsDataURL(file);
@@ -31,14 +30,24 @@ const Avatar = ({ avatarUrl, onAvatarChange }) => {
 
   return (
     <div className="avatar-container">
-      <div className="avatar-selection">
-        <button onClick={() => setShowPredefined(true)}>Predefined</button>
-        <button onClick={() => setShowPredefined(false)}>Custom</button>
+      <div className="avatar-display">
+        {avatarUrl ? (
+          <img
+            src={avatarUrl}
+            alt="Selected Avatar"
+            className="avatar-image"
+            onClick={() => setShowAvatarSelection(true)} // Ermöglicht, das Avatar durch Klick zu ändern
+          />
+        ) : (
+          <button onClick={() => setShowAvatarSelection(true)}>
+            Avatar auswählen
+          </button>
+        )}
       </div>
-      <div
-        className={`avatar-display ${showPredefined ? 'show-predefined' : 'show-custom'}`}
-      >
-        {showPredefined ? (
+
+      {/* Zeige die Avatar-Auswahl nur, wenn der Benutzer sie aktiviert */}
+      {showAvatarSelection && (
+        <div className="avatar-selection">
           <div className="predefined-avatars">
             {predefinedAvatars.map((url, index) => (
               <button
@@ -49,30 +58,27 @@ const Avatar = ({ avatarUrl, onAvatarChange }) => {
                 <img
                   src={url}
                   alt={`Avatar ${index + 1}`}
-                  className={`avatar-image ${avatarUrl === url ? 'visible' : 'hidden'}`}
+                  className="avatar-image"
                 />
               </button>
             ))}
           </div>
-        ) : (
           <div className="custom-avatar-upload">
             <input
               type="file"
               accept="image/*"
               onChange={handleCustomAvatarUpload}
             />
-            {customAvatar && (
-              <img
-                src={customAvatar}
-                alt="Custom Avatar"
-                className="avatar-image visible"
-              />
-            )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
+};
+
+Avatar.propTypes = {
+  avatarUrl: PropTypes.string,
+  onAvatarChange: PropTypes.func.isRequired,
 };
 
 export default Avatar;
