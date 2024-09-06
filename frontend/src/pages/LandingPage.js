@@ -39,18 +39,21 @@ const LandingPage = () => {
         toast.error('Registration failed!');
       }
     } catch (error) {
-      console.log (error)
-      console.log(formData)
+      console.log(error);
       toast.error('Error occurred during registration.');
     }
+  };
+
+  const handleLoginClick = () => {
+    navigate('/login'); // Navigiert zur Login-Seite
   };
 
   return (
     <div className="landing-container">
       <h2>Willkommen bei WanderTrails</h2>
-      <p>
-        Entdecke maßgeschneiderte Wanderwege, die perfekt zu deinen Vorlieben passen!
-      </p>
+      <p>Entdecke maßgeschneiderte Wanderwege, die perfekt zu deinen Vorlieben passen!</p>
+      
+      {/* Registration Form */}
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -89,10 +92,15 @@ const LandingPage = () => {
         />
         <button type="submit" className="btn-register">Register</button>
       </form>
+      
+      {/* Login Section */}
+      <p>Bereits registriert? <button onClick={handleLoginClick} className="btn-login">Login</button></p>
+
       <ToastContainer />
     </div>
   );
 };
 
 export default LandingPage;
+
 
