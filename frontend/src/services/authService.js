@@ -9,7 +9,12 @@ export const registerUser = async (data) => {
     if (!response.ok) {
       throw new Error('Registrierung fehlgeschlagen');
     }
-    return response.json();
+    const result = await response.json();
+    if (result.token) {
+      // Token im localStorage speichern
+      localStorage.setItem('token', result.token);
+    }
+    return result;
   } catch (error) {
     console.error('Error during registration:', error);
     throw error;
@@ -27,7 +32,12 @@ export const loginUser = async (data) => {
     if (!response.ok) {
       throw new Error('Login fehlgeschlagen');
     }
-    return response.json();
+    const result = await response.json();
+    if (result.token) {
+      // Token im localStorage speichern
+      localStorage.setItem('token', result.token);
+    }
+    return result;
   } catch (error) {
     console.error('Error during login:', error);
     throw error;
@@ -37,12 +47,18 @@ export const loginUser = async (data) => {
 // Dashboard-Daten abrufen
 export const getDashboard = async (token) => {
   try {
+    console.log("Token used for request:", token); // Debugging-Zwecke
     const response = await fetch('http://localhost:5000/api/dashboard', {
       method: 'GET',
-      headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        'Authorization': `Bearer ${token}`, // Korrekte Header-Name
+      },
     });
+
     if (!response.ok) {
-      throw new Error('Daten konnten nicht abgerufen werden');
+      const errorData = await response.json(); // Fehlerdetails aus der Antwort lesen
+      console.error('Error response from server:', errorData);
+      throw new Error(`Daten konnten nicht abgerufen werden: ${errorData.message}`);
     }
     return response.json();
   } catch (error) {
