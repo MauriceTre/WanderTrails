@@ -1,6 +1,7 @@
 // src/pages/WanderwegePage.js
 import React, { useState } from 'react';
 import Map from '../components/Map';
+import '../styles/WanderwegePage.css';
 
 const WanderwegePage = () => {
   const [markers, setMarkers] = useState([]);

@@ -1,0 +1,103 @@
+/* Styling für die Wanderwege-Seite */
+.wanderwege-page {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: rgba(255, 255, 255, 0.9); /* Helle Hintergrundfarbe für bessere Lesbarkeit */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .wanderwege-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .wanderwege-header h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .wanderwege-header p {
+    font-size: 1.2rem;
+    color: #666;
+  }
+  
+  .marker-list {
+    margin-top: 20px;
+  }
+  
+  .marker-list ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .marker-list li {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease;
+  }
+  
+  .marker-list li:hover {
+    background-color: #e9e9e9;
+  }
+  
+  .marker-details {
+    flex-grow: 1;
+  }
+  
+  .marker-details h3 {
+    font-size: 1.2rem;
+    margin: 0;
+    color: #333;
+  }
+  
+  .marker-details p {
+    margin: 5px 0;
+    color: #666;
+  }
+  
+  .marker-actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .marker-actions button {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .marker-actions button:hover {
+    background-color: #0056b3;
+  }
+  
+  .map-container {
+    margin-top: 30px;
+  }
+  
+  .map-container h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .map-container iframe {
+    width: 100%;
+    height: 500px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
