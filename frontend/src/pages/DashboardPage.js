@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Avatar from '../components/Avatar';
 import { getSavedHikingTrails } from '../utils/wanderwege';
-import { getDashboard } from '../services/authService';
+import { getDashboard, updateUserAvatar } from '../services/authService';
 import '../styles/DashboardPage.css';
 
 const DashboardPage = () => {
@@ -12,40 +12,71 @@ const DashboardPage = () => {
     avatarUrl: '',
   });
   const [trails, setTrails] = useState([]);
+  const [loading, setLoading] = useState(true); // State für Loading-Indikator
+  const [error, setError] = useState(null); // State für Fehler-Handling
+  const [avatarLoading, setAvatarLoading] = useState(false); // Avatar-Update-Status
 
+  // Fetch user data and saved trails from API
   useEffect(() => {
     const fetchDashboardData = async () => {
       const token = localStorage.getItem('token');
-      const data = await getDashboard(token);  // API Call to get user details
-      if (data) {
-        setUser({
-          name: data.name || '',
-          age: data.age || '',
-          location: data.location || '',
-          avatarUrl: data.avatarUrl || '',
-        });
+      try {
+        const data = await getDashboard(token); // API Call to get user details
+        if (data) {
+          setUser({
+            name: data.name || '',
+            age: data.age || '',
+            location: data.location || '',
+            avatarUrl: data.avatarUrl || '',
+          });
+        }
+      } catch (err) {
+        setError('Fehler beim Abrufen der Benutzerdaten'); // Fehler beim Abrufen
+      } finally {
+        setLoading(false); // Laden abgeschlossen
       }
     };
-    
+
     fetchDashboardData();
   }, []);
 
   useEffect(() => {
     const fetchTrails = async () => {
-      const savedTrails = await getSavedHikingTrails();
-      setTrails(savedTrails);
+      try {
+        const savedTrails = await getSavedHikingTrails();
+        setTrails(savedTrails);
+      } catch (err) {
+        setError('Fehler beim Abrufen der gespeicherten Routen'); // Fehler beim Abrufen
+      }
     };
     fetchTrails();
   }, []);
 
-  const handleAvatarChange = (newAvatarUrl) => {
-    setUser({ ...user, avatarUrl: newAvatarUrl });
+  // Handle avatar update
+  const handleAvatarChange = async (newAvatarUrl) => {
+    const token = localStorage.getItem('token');
+    setAvatarLoading(true);
+    try {
+      await updateUserAvatar(token, newAvatarUrl);
+      setUser({ ...user, avatarUrl: newAvatarUrl }); // Update the user's avatar in the state
+    } catch (err) {
+      setError('Fehler beim Aktualisieren des Avatars');
+    } finally {
+      setAvatarLoading(false);
+    }
   };
+
+  if (loading) return <div>Lade Benutzerdaten...</div>; // Loading-Indikator anzeigen
 
   return (
     <div className="dashboard-page">
+      {error && <div className="error-message">{error}</div>} {/* Fehlernachricht anzeigen */}
       <div className="user-section">
-        <Avatar avatarUrl={user.avatarUrl} onAvatarChange={handleAvatarChange} />
+        <Avatar 
+          avatarUrl={user.avatarUrl} 
+          onAvatarChange={handleAvatarChange} 
+          loading={avatarLoading} // Loading-Indikator für Avatar
+        />
         <div className="user-info">
           <h2>Willkommen, {user.name}!</h2>
           <div>
@@ -63,9 +94,13 @@ const DashboardPage = () => {
       <div className="hiking-trails">
         <h2>Gespeicherte Routen</h2>
         <ul>
-          {trails.map((trail, index) => (
-            <li key={index}>{trail.name}</li>
-          ))}
+          {trails.length > 0 ? (
+            trails.map((trail, index) => (
+              <li key={index}>{trail.name}</li>
+            ))
+          ) : (
+            <li>Keine gespeicherten Routen gefunden.</li>
+          )}
         </ul>
       </div>
     </div>
@@ -73,3 +108,4 @@ const DashboardPage = () => {
 };
 
 export default DashboardPage;
+

@@ -87,3 +87,26 @@ export const updateUserAvatar = async (token, avatarUrl) => {
     throw error;
   }
 };
+// Funktion zum Speichern der Route im Backend
+export const saveRoute = async (token, routeName, markers) => {
+  try {
+    const response = await fetch('http://localhost:5000/api/saveRoute', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`, // Token für Authentifizierung
+      },
+      body: JSON.stringify({ routeName, markers }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Fehler beim Speichern der Route: ${errorData.message}`);
+    }
+
+    return response.json(); // Erfolgreiche Antwort verarbeiten
+  } catch (error) {
+    console.error('Error saving route:', error);
+    throw error;
+  }
+};
