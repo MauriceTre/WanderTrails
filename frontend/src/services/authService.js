@@ -87,26 +87,46 @@ export const updateUserAvatar = async (token, avatarUrl) => {
     throw error;
   }
 };
-// Funktion zum Speichern der Route im Backend
+// Route speichern
 export const saveRoute = async (token, routeName, markers) => {
   try {
-    const response = await fetch('http://localhost:5000/api/saveRoute', {
+    const response = await fetch('/api/routes/save', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`, // Token für Authentifizierung
+        'Authorization': `Bearer ${token}`
       },
-      body: JSON.stringify({ routeName, markers }),
+      body: JSON.stringify({ routeName, markers })
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(`Fehler beim Speichern der Route: ${errorData.message}`);
+      throw new Error('Fehler beim Speichern der Route');
     }
 
-    return response.json(); // Erfolgreiche Antwort verarbeiten
+    return await response.json();
   } catch (error) {
-    console.error('Error saving route:', error);
+    console.error('Fehler beim Speichern der Route:', error);
+    throw error;
+  }
+};
+
+// Gespeicherte Routen abrufen
+export const getSavedHikingTrails = async (token) => {
+  try {
+    const response = await fetch('/api/routes/user-routes', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Fehler beim Abrufen der Routen');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Fehler beim Abrufen der Routen:', error);
     throw error;
   }
 };

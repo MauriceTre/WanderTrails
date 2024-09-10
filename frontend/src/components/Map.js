@@ -8,11 +8,12 @@ import {
   useMapEvents,
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { saveRoute } from '../services/authService'; // Importiere die saveRoute API-Funktion
+import { saveRoute } from '../services/authService'; // Importiere die API-Funktion
 
-const defaultCenter = [51.1657, 10.4515];
-const defaultZoom = 6;
+const defaultCenter = [51.1657, 10.4515]; // Zentrale Koordinaten für Deutschland
+const defaultZoom = 6; // Zoom Level
 
+// Hook zum Hinzufügen von Markierungen
 function LocationMarker({ addMarker }) {
   useMapEvents({
     click(e) {
@@ -26,24 +27,28 @@ function LocationMarker({ addMarker }) {
 
 const Map = ({ token }) => {
   const [markers, setMarkers] = useState([]);
-  const [routeName, setRouteName] = useState(''); // Route Name State
+  const [routeName, setRouteName] = useState('');
+  const [saving, setSaving] = useState(false);
 
   const handleAddMarker = (lat, lng) => {
     setMarkers([...markers, [lat, lng]]);
   };
 
-  // Funktion zum Speichern der Route
   const handleSaveRoute = async () => {
-    if (!routeName) {
-      alert('Bitte gib der Route einen Namen.');
+    if (!routeName || markers.length === 0) {
+      alert('Bitte geben Sie einen Routenname ein und fügen Sie Markierungen hinzu.');
       return;
     }
 
+    setSaving(true);
     try {
       await saveRoute(token, routeName, markers);
       alert('Route erfolgreich gespeichert!');
+      setMarkers([]); // Optionale: Markierungen zurücksetzen nach dem Speichern
     } catch (error) {
       alert('Fehler beim Speichern der Route: ' + error.message);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -55,7 +60,9 @@ const Map = ({ token }) => {
         onChange={(e) => setRouteName(e.target.value)}
         placeholder="Route Name"
       />
-      <button onClick={handleSaveRoute}>Route speichern</button>
+      <button onClick={handleSaveRoute} disabled={saving}>
+        {saving ? 'Speichern...' : 'Route speichern'}
+      </button>
       <MapContainer
         center={defaultCenter}
         zoom={defaultZoom}
