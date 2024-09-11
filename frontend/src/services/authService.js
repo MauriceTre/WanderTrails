@@ -90,17 +90,18 @@ export const updateUserAvatar = async (token, avatarUrl) => {
 // Route speichern
 export const saveRoute = async (token, routeName, markers) => {
   try {
-    const response = await fetch('/api/routes/save', {
+    const response = await fetch('http://localhost:5000/api/routes/save', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${token}`,
       },
-      body: JSON.stringify({ routeName, markers })
+      body: JSON.stringify({ routeName, markers }),
     });
 
     if (!response.ok) {
-      throw new Error('Fehler beim Speichern der Route');
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Fehler beim Speichern der Route');
     }
 
     return await response.json();
@@ -110,18 +111,21 @@ export const saveRoute = async (token, routeName, markers) => {
   }
 };
 
+
+
 // Gespeicherte Routen abrufen
 export const getSavedHikingTrails = async (token) => {
   try {
-    const response = await fetch('/api/routes/user-routes', {
+    const response = await fetch('http://localhost:5000/api/routes/user-routes', {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${token}`
-      }
+        'Authorization': `Bearer ${token}`,
+      },
     });
 
     if (!response.ok) {
-      throw new Error('Fehler beim Abrufen der Routen');
+      const errorData = await response.json();
+      throw new Error(errorData.message);
     }
 
     return await response.json();

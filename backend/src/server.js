@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/authRoutes');
+const routeRoutes = require('./routes/routeRoutes')
 const { authenticateToken } = require('./middleware/authMiddleware');
 const db = require('./db'); 
 require('dotenv').config();
@@ -12,7 +13,7 @@ app.use(bodyParser.json());
 
 // Auth routes
 app.use('/api', authRoutes);
-
+app.use('/api/routes', routeRoutes);
 // Dashboard-Route
 app.get('/api/dashboard', authenticateToken, async (req, res) => {
   const userId = req.user.id;

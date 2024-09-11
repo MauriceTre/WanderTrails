@@ -35,22 +35,27 @@ const Map = ({ token }) => {
   };
 
   const handleSaveRoute = async () => {
-    if (!routeName || markers.length === 0) {
-      alert('Bitte geben Sie einen Routenname ein und fügen Sie Markierungen hinzu.');
-      return;
-    }
-
-    setSaving(true);
     try {
-      await saveRoute(token, routeName, markers);
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Du bist nicht eingeloggt.');
+        return;
+      }
+  
+      // Sicherstellen, dass die Route einen Namen und Marker hat
+      if (!routeName || markers.length === 0) {
+        alert('Bitte einen Routennamen angeben und Marker setzen.');
+        return;
+      }
+  
+      await saveRoute(token, routeName, markers); // API-Aufruf
       alert('Route erfolgreich gespeichert!');
-      setMarkers([]); // Optionale: Markierungen zurücksetzen nach dem Speichern
     } catch (error) {
+      console.error('Fehler beim Speichern der Route:', error);
       alert('Fehler beim Speichern der Route: ' + error.message);
-    } finally {
-      setSaving(false);
     }
   };
+  
 
   return (
     <div>
