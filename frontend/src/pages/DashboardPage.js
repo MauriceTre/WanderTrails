@@ -21,12 +21,13 @@ const DashboardPage = () => {
       const token = localStorage.getItem('token');
       try {
         const data = await getDashboard(token);
+        console.log("hallo", data)
         if (data) {
           setUser({
-            name: data.name || '',
-            age: data.age || '',
-            location: data.location || '',
-            avatarUrl: data.avatarUrl || '',
+            name: data.user.username || '',
+            age: data.user.age || '',
+            location: data.user.location || '',
+            avatarUrl: data.user.avatarUrl || '',
           });
         }
       } catch (err) {
