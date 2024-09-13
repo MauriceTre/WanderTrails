@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Avatar from '../components/Avatar';
-import { getSavedHikingTrails } from '../utils/wanderwege';
-import { getDashboard } from '../services/authService';
+import { getSavedHikingTrails } from '../services/authService'; // Importiere die API-Funktion
+import { getDashboard, updateUserAvatar } from '../services/authService';
 import '../styles/DashboardPage.css';
+
 const DashboardPage = () => {
   const [user, setUser] = useState({
     name: '',
@@ -11,85 +12,95 @@ const DashboardPage = () => {
     avatarUrl: '',
   });
   const [trails, setTrails] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [avatarLoading, setAvatarLoading] = useState(false);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       const token = localStorage.getItem('token');
-      const data = await getDashboard(token);  // API Call to get user details
-      if (data) {
-        setUser({
-          name: data.name,
-          age: data.age,
-          location: data.location,
-          avatarUrl: data.avatarUrl,
-        });
+      try {
+        const data = await getDashboard(token);
+        console.log("hallo", data)
+        if (data) {
+          setUser({
+            name: data.user.username || '',
+            age: data.user.age || '',
+            location: data.user.location || '',
+            avatarUrl: data.user.avatarUrl || '',
+          });
+        }
+      } catch (err) {
+        setError('Fehler beim Abrufen der Benutzerdaten');
+      } finally {
+        setLoading(false);
       }
     };
-    
+
     fetchDashboardData();
   }, []);
 
   useEffect(() => {
     const fetchTrails = async () => {
-      const savedTrails = await getSavedHikingTrails();
-      setTrails(savedTrails);
+      const token = localStorage.getItem('token');
+      try {
+        const savedTrails = await getSavedHikingTrails(token);
+        setTrails(savedTrails);
+      } catch (err) {
+        setError('Fehler beim Abrufen der gespeicherten Routen');
+      }
     };
     fetchTrails();
   }, []);
 
-  const handleAvatarChange = (newAvatarUrl) => {
-    setUser({ ...user, avatarUrl: newAvatarUrl });
+  const handleAvatarChange = async (newAvatarUrl) => {
+    const token = localStorage.getItem('token');
+    setAvatarLoading(true);
+    try {
+      await updateUserAvatar(token, newAvatarUrl);
+      setUser({ ...user, avatarUrl: newAvatarUrl });
+    } catch (err) {
+      setError('Fehler beim Aktualisieren des Avatars');
+    } finally {
+      setAvatarLoading(false);
+    }
   };
 
-  const handleInfoChange = (e) => {
-    const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
-  };
+  if (loading) return <div>Lade Benutzerdaten...</div>;
 
   return (
     <div className="dashboard-page">
+      {error && <div className="error-message">{error}</div>}
       <div className="user-section">
-        <Avatar avatarUrl={user.avatarUrl} onAvatarChange={handleAvatarChange} />
+        <Avatar 
+          avatarUrl={user.avatarUrl} 
+          onAvatarChange={handleAvatarChange} 
+          loading={avatarLoading}
+        />
         <div className="user-info">
           <h2>Willkommen, {user.name}!</h2>
-          <form>
-            <div>
-              <label>Name:</label>
-              <input
-                type="text"
-                name="name"
-                value={user.name}
-                onChange={handleInfoChange}
-              />
-            </div>
-            <div>
-              <label>Alter:</label>
-              <input
-                type="number"
-                name="age"
-                value={user.age}
-                onChange={handleInfoChange}
-              />
-            </div>
-            <div>
-              <label>Wohnort:</label>
-              <input
-                type="text"
-                name="location"
-                value={user.location}
-                onChange={handleInfoChange}
-              />
-            </div>
-          </form>
+          <div>
+            <strong>Name:</strong> {user.name}
+          </div>
+          <div>
+            <strong>Alter:</strong> {user.age}
+          </div>
+          <div>
+            <strong>Wohnort:</strong> {user.location}
+          </div>
         </div>
       </div>
 
       <div className="hiking-trails">
         <h2>Gespeicherte Routen</h2>
         <ul>
-          {trails.map((trail, index) => (
-            <li key={index}>{trail.name}</li>
-          ))}
+          {trails.length > 0 ? (
+            trails.map((trail, index) => (
+              <li key={index}>{trail.route_name}</li>
+            ))
+          ) : (
+            <li>Keine gespeicherten Routen gefunden.</li>
+          )}
         </ul>
       </div>
     </div>

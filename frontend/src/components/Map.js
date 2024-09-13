@@ -1,4 +1,3 @@
-// src/components/Map.js
 import React, { useState } from 'react';
 import {
   MapContainer,
@@ -9,8 +8,9 @@ import {
   useMapEvents,
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-// Zentrale Koordinaten für Deutschland
-const defaultCenter = [51.1657, 10.4515]; // Deutschland Koordinaten
+import { saveRoute } from '../services/authService'; // Importiere die API-Funktion
+
+const defaultCenter = [51.1657, 10.4515]; // Zentrale Koordinaten für Deutschland
 const defaultZoom = 6; // Zoom Level
 
 // Hook zum Hinzufügen von Markierungen
@@ -25,35 +25,77 @@ function LocationMarker({ addMarker }) {
   return null;
 }
 
-const Map = ({ markers, onAddMarker }) => {
+const Map = ({ token }) => {
+  const [markers, setMarkers] = useState([]);
+  const [routeName, setRouteName] = useState('');
+  const [saving, setSaving] = useState(false);
+
+  const handleAddMarker = (lat, lng) => {
+    setMarkers([...markers, [lat, lng]]);
+  };
+
+  const handleSaveRoute = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Du bist nicht eingeloggt.');
+        return;
+      }
+  
+      // Sicherstellen, dass die Route einen Namen und Marker hat
+      if (!routeName || markers.length === 0) {
+        alert('Bitte einen Routennamen angeben und Marker setzen.');
+        return;
+      }
+  
+      await saveRoute(token, routeName, markers); // API-Aufruf
+      alert('Route erfolgreich gespeichert!');
+    } catch (error) {
+      console.error('Fehler beim Speichern der Route:', error);
+      alert('Fehler beim Speichern der Route: ' + error.message);
+    }
+  };
+  
+
   return (
-    <MapContainer
-      center={defaultCenter}
-      zoom={defaultZoom}
-      style={{ height: '500px', width: '100%' }}
-    >
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    <div>
+      <input
+        type="text"
+        value={routeName}
+        onChange={(e) => setRouteName(e.target.value)}
+        placeholder="Route Name"
       />
-      <LocationMarker addMarker={onAddMarker} />
-      {markers.length > 0 && (
-        <>
-          {markers.map((position, index) => (
-            <Marker key={index} position={position}>
-              <Popup>
-                Punkt {index + 1}
-                <br />
-                {`Latitude: ${position[0]}`}
-                <br />
-                {`Longitude: ${position[1]}`}
-              </Popup>
-            </Marker>
-          ))}
-          <Polyline positions={markers} color="blue" />
-        </>
-      )}
-    </MapContainer>
+      <button onClick={handleSaveRoute} disabled={saving}>
+        {saving ? 'Speichern...' : 'Route speichern'}
+      </button>
+      <MapContainer
+        center={defaultCenter}
+        zoom={defaultZoom}
+        style={{ height: '500px', width: '100%' }}
+      >
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
+        <LocationMarker addMarker={handleAddMarker} />
+        {markers.length > 0 && (
+          <>
+            {markers.map((position, index) => (
+              <Marker key={index} position={position}>
+                <Popup>
+                  Punkt {index + 1}
+                  <br />
+                  Latitude: {position[0]}
+                  <br />
+                  Longitude: {position[1]}
+                </Popup>
+              </Marker>
+            ))}
+            <Polyline positions={markers} color="blue" />
+          </>
+        )}
+      </MapContainer>
+    </div>
   );
 };
 
