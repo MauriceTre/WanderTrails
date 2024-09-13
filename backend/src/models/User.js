@@ -25,6 +25,16 @@ const User = {
     }
   },
 
+  findById: async (userId) => {
+    try {
+      const query = 'SELECT username, age, location FROM users WHERE id = ?';
+      const [rows] = await db.promise().query(query, [userId]);
+      return rows[0]; // Gib nur den ersten Benutzer zurück
+    } catch (error) {
+      throw error;
+    }
+  },
+
   saveRoute: async (userId, route) => {
     try {
       const query = 'INSERT INTO routes (user_id, route_data) VALUES (?, ?)';
@@ -48,3 +58,4 @@ const User = {
 };
 
 module.exports = User;
+

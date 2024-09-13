@@ -45,7 +45,7 @@ export const loginUser = async (data) => {
 };
 
 // Dashboard-Daten abrufen
-export const getDashboard = async (token) => {
+export const getDashboard = async (token,) => {
   try {
     console.log("Token used for request:", token); // Debugging-Zwecke
     const response = await fetch('http://localhost:5000/api/dashboard', {
