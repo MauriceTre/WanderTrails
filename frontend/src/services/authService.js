@@ -1,20 +1,18 @@
+import axios from 'axios';
+
 // Registrierung
 export const registerUser = async (data) => {
   try {
-    const response = await fetch('http://localhost:5000/api/register', {
-      method: 'POST',
+    const response = await axios.post('http://localhost:5000/api/register', data, {
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
     });
-    if (!response.ok) {
-      throw new Error('Registrierung fehlgeschlagen');
-    }
-    const result = await response.json();
-    if (result.token) {
+    
+    if (response.data.token) {
       // Token im localStorage speichern
-      localStorage.setItem('token', result.token);
+      localStorage.setItem('token', response.data.token);
     }
-    return result;
+
+    return response.data;
   } catch (error) {
     console.error('Error during registration:', error);
     throw error;
@@ -24,20 +22,16 @@ export const registerUser = async (data) => {
 // Login
 export const loginUser = async (data) => {
   try {
-    const response = await fetch('http://localhost:5000/api/login', {
-      method: 'POST',
+    const response = await axios.post('http://localhost:5000/api/login', data, {
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
     });
-    if (!response.ok) {
-      throw new Error('Login fehlgeschlagen');
-    }
-    const result = await response.json();
-    if (result.token) {
+
+    if (response.data.token) {
       // Token im localStorage speichern
-      localStorage.setItem('token', result.token);
+      localStorage.setItem('token', response.data.token);
     }
-    return result;
+
+    return response.data;
   } catch (error) {
     console.error('Error during login:', error);
     throw error;
@@ -45,22 +39,13 @@ export const loginUser = async (data) => {
 };
 
 // Dashboard-Daten abrufen
-export const getDashboard = async (token,) => {
+export const getDashboard = async (token) => {
   try {
-    console.log("Token used for request:", token); // Debugging-Zwecke
-    const response = await fetch('http://localhost:5000/api/dashboard', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`, // Korrekte Header-Name
-      },
+    const response = await axios.get('http://localhost:5000/api/dashboard', {
+      headers: { 'Authorization': `Bearer ${token}` },
     });
 
-    if (!response.ok) {
-      const errorData = await response.json(); // Fehlerdetails aus der Antwort lesen
-      console.error('Error response from server:', errorData);
-      throw new Error(`Daten konnten nicht abgerufen werden: ${errorData.message}`);
-    }
-    return response.json();
+    return response.data;
   } catch (error) {
     console.error('Error fetching dashboard data:', error);
     throw error;
@@ -70,65 +55,41 @@ export const getDashboard = async (token,) => {
 // Avatar-Update
 export const updateUserAvatar = async (token, avatarUrl) => {
   try {
-    const response = await fetch('http://localhost:5000/api/updateAvatar', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ avatarUrl }),
-    });
-    if (!response.ok) {
-      throw new Error('Avatar-Update fehlgeschlagen');
-    }
-    return response.json();
+    const response = await axios.put('http://localhost:5000/api/updateAvatar', 
+      { avatarUrl }, 
+      { headers: { 'Authorization': `Bearer ${token}` } }
+    );
+
+    return response.data;
   } catch (error) {
     console.error('Error updating avatar:', error);
     throw error;
   }
 };
+
 // Route speichern
 export const saveRoute = async (token, routeName, markers) => {
   try {
-    const response = await fetch('http://localhost:5000/api/routes/save', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-      body: JSON.stringify({ routeName, markers }),
-    });
+    const response = await axios.post('http://localhost:5000/api/routes/save', 
+      { routeName, markers }, 
+      { headers: { 'Authorization': `Bearer ${token}` } }
+    );
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Fehler beim Speichern der Route');
-    }
-
-    return await response.json();
+    return response.data;
   } catch (error) {
     console.error('Fehler beim Speichern der Route:', error);
     throw error;
   }
 };
 
-
-
 // Gespeicherte Routen abrufen
 export const getSavedHikingTrails = async (token) => {
   try {
-    const response = await fetch('http://localhost:5000/api/routes/user-routes', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
+    const response = await axios.get('http://localhost:5000/api/routes/user-routes', {
+      headers: { 'Authorization': `Bearer ${token}` },
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message);
-    }
-
-    return await response.json();
+    return response.data;
   } catch (error) {
     console.error('Fehler beim Abrufen der Routen:', error);
     throw error;
