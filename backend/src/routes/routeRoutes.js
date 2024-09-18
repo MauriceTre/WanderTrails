@@ -4,7 +4,6 @@ const db = require('../db');
 const { authenticateToken } = require('../middleware/authMiddleware');
 const router = express.Router();
 
-// Route speichern
 router.post('/save', authenticateToken, async (req, res) => {
   const { routeName, markers } = req.body;
   const userId = req.user.id;
@@ -24,7 +23,6 @@ router.post('/save', authenticateToken, async (req, res) => {
   }
 });
 
-// Gespeicherte Routen abrufen
 router.get('/user-routes', authenticateToken, async (req, res) => {
   const userId = req.user.id;
 

@@ -45,7 +45,7 @@ const LandingPage = () => {
   };
 
   const handleLoginClick = () => {
-    navigate('/login'); // Navigiert zur Login-Seite
+    navigate('/login'); 
   };
 
   return (
@@ -53,7 +53,7 @@ const LandingPage = () => {
       <h2>Willkommen bei WanderTrails</h2>
       <p>Entdecke maßgeschneiderte Wanderwege, die perfekt zu deinen Vorlieben passen!</p>
       
-      {/* Registration Form */}
+      {}
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -93,7 +93,7 @@ const LandingPage = () => {
         <button type="submit" className="btn-register">Register</button>
       </form>
       
-      {/* Login Section */}
+      {}
       <p>Bereits registriert? <button onClick={handleLoginClick} className="btn-login">Login</button></p>
 
       <ToastContainer />

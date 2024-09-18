@@ -8,12 +8,11 @@ import {
   useMapEvents,
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { saveRoute } from '../services/authService'; // Importiere die API-Funktion
+import { saveRoute } from '../services/authService'; 
 
-const defaultCenter = [51.1657, 10.4515]; // Zentrale Koordinaten für Deutschland
-const defaultZoom = 6; // Zoom Level
+const defaultCenter = [51.1657, 10.4515];
+const defaultZoom = 6; 
 
-// Hook zum Hinzufügen von Markierungen
 function LocationMarker({ addMarker }) {
   useMapEvents({
     click(e) {
@@ -41,14 +40,12 @@ const Map = ({ token }) => {
         alert('Du bist nicht eingeloggt.');
         return;
       }
-  
-      // Sicherstellen, dass die Route einen Namen und Marker hat
       if (!routeName || markers.length === 0) {
         alert('Bitte einen Routennamen angeben und Marker setzen.');
         return;
       }
   
-      await saveRoute(token, routeName, markers); // API-Aufruf
+      await saveRoute(token, routeName, markers); 
       alert('Route erfolgreich gespeichert!');
     } catch (error) {
       console.error('Fehler beim Speichern der Route:', error);

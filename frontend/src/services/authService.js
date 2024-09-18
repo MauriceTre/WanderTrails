@@ -38,7 +38,6 @@ export const loginUser = async (data) => {
   }
 };
 
-// Dashboard-Daten abrufen
 export const getDashboard = async (token) => {
   try {
     const response = await axios.get('http://localhost:5000/api/dashboard', {
@@ -52,7 +51,6 @@ export const getDashboard = async (token) => {
   }
 };
 
-// Avatar-Update
 export const updateUserAvatar = async (token, avatarUrl) => {
   try {
     const response = await axios.put('http://localhost:5000/api/updateAvatar', 
@@ -67,7 +65,6 @@ export const updateUserAvatar = async (token, avatarUrl) => {
   }
 };
 
-// Route speichern
 export const saveRoute = async (token, routeName, markers) => {
   try {
     const response = await axios.post('http://localhost:5000/api/routes/save', 
@@ -82,7 +79,6 @@ export const saveRoute = async (token, routeName, markers) => {
   }
 };
 
-// Gespeicherte Routen abrufen
 export const getSavedHikingTrails = async (token) => {
   try {
     const response = await axios.get('http://localhost:5000/api/routes/user-routes', {
