@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Avatar from '../components/Avatar';
-import { getSavedHikingTrails } from '../services/authService'; // Importiere die API-Funktion
-import { getDashboard, updateUserAvatar } from '../services/authService';
+import { getSavedHikingTrails, getDashboard, updateUserAvatar, saveRoute } from '../services/authService';
 import '../styles/DashboardPage.css';
 
 const DashboardPage = () => {
@@ -21,7 +20,6 @@ const DashboardPage = () => {
       const token = localStorage.getItem('token');
       try {
         const data = await getDashboard(token);
-        console.log("hallo", data)
         if (data) {
           setUser({
             name: data.user.username || '',
@@ -66,6 +64,19 @@ const DashboardPage = () => {
     }
   };
 
+  const saveRouteHandler = async () => {
+    const token = localStorage.getItem('token');
+    const routeName = 'My Hike'; // Beispielname
+    const markers = [{ lat: 52.52, lng: 13.405 }]; // Beispiel-Markierungen
+
+    try {
+      const response = await saveRoute(token, routeName, markers);
+      console.log(response.message); // Erfolgsmeldung
+    } catch (error) {
+      setError('Fehler beim Speichern der Route');
+    }
+  };
+
   if (loading) return <div>Lade Benutzerdaten...</div>;
 
   return (
@@ -103,6 +114,8 @@ const DashboardPage = () => {
           )}
         </ul>
       </div>
+
+      {/* Beispiel für das Speichern einer Route */}
     </div>
   );
 };
