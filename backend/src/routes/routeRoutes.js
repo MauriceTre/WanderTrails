@@ -8,11 +8,9 @@ const router = express.Router();
 router.post('/save', authenticateToken, async (req, res) => {
   const { routeName, markers } = req.body;
   const userId = req.user.id;
-
   if (!routeName || markers.length === 0) {
     return res.status(400).json({ message: 'Invalid route data' });
   }
-
   try {
     const markersJson = JSON.stringify(markers);
     await db.query('INSERT INTO routes (user_id, route_name, markers) VALUES (?, ?, ?)', 
@@ -25,22 +23,35 @@ router.post('/save', authenticateToken, async (req, res) => {
 });
 
 // Gespeicherte Routen abrufen
+// Beispiel für Fehlerprotokollierung im Backend
 router.get('/user-routes', authenticateToken, async (req, res) => {
   const userId = req.user.id;
 
   try {
     const [routes] = await db.query('SELECT route_name, markers FROM routes WHERE user_id = ?', [userId]);
 
-    const routesWithMarkers = routes.map(route => ({
-      route_name: route.route_name,
-      markers: JSON.parse(route.markers), // Falls die Marker als JSON-String gespeichert wurden
-    }));
+    // Debug-Ausgabe der Daten
+    console.log('Rohdaten aus der Datenbank:', routes);
 
-    res.status(200).json(routesWithMarkers); // JSON-Antwort an den Client senden
+    const routesWithMarkers = routes.map(route => {
+      try {
+        return {
+          route_name: route.route_name,
+          markers: route.markers,
+        };
+      } catch (parseError) {
+        console.error('Fehler beim Parsen der Marker:', parseError.message);
+        return { route_name: route.route_name, markers: route.markers };
+      }
+    });
+
+    res.status(200).json(routesWithMarkers);
   } catch (error) {
-    console.error('Error fetching routes:', error);
-    res.status(500).json({ message: 'Failed to fetch routes' });
+    console.error('Error fetching routes:', error.message);
+    res.status(500).json({ message: 'Failed to fetch routes', error: error.message });
   }
 });
+
+
 
 module.exports = router;

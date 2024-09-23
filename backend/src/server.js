@@ -11,16 +11,14 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Auth routes
 app.use('/api', authRoutes);
 app.use('/api/routes', routeRoutes);
-// Dashboard-Route
 app.get('/api/dashboard', authenticateToken, async (req, res) => {
   const userId = req.user.id;
-  console.log('User ID:', userId); // Debugging-Zwecke
+  console.log('User ID:', userId); 
   try {
     const [user] = await db.query('SELECT username, age, location, avatarUrl FROM users WHERE id = ?', [userId]);
-    console.log('User Data:', user); // Debugging-Zwecke
+    console.log('User Data:', user);
     if (user.length === 0) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -32,8 +30,6 @@ app.get('/api/dashboard', authenticateToken, async (req, res) => {
   }
 });
 
-
-// Avatar-Update-Route
 app.put('/api/updateAvatar', authenticateToken, async (req, res) => {
   const userId = req.user.id;
   const { avatarUrl } = req.body;

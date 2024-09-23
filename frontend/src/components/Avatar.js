@@ -5,15 +5,14 @@ const predefinedAvatars = [
   '/avatars/avatar1.png',
   '/avatars/avatar2.png',
   '/avatars/avatar3.png',
-  // Weitere Avatare hinzufügen
 ];
 
 const Avatar = ({ avatarUrl, onAvatarChange }) => {
-  const [showAvatarSelection, setShowAvatarSelection] = useState(false); // Auswahloptionen anzeigen oder verbergen
+  const [showAvatarSelection, setShowAvatarSelection] = useState(false); 
 
   const handleAvatarChange = (newAvatarUrl) => {
     onAvatarChange(newAvatarUrl);
-    setShowAvatarSelection(false); // Verberge die Auswahloptionen nach Auswahl
+    setShowAvatarSelection(false); 
   };
 
   const handleCustomAvatarUpload = (e) => {
@@ -21,7 +20,7 @@ const Avatar = ({ avatarUrl, onAvatarChange }) => {
     const reader = new FileReader();
     reader.onloadend = () => {
       onAvatarChange(reader.result);
-      setShowAvatarSelection(false); // Verberge die Auswahloptionen nach Upload
+      setShowAvatarSelection(false); 
     };
     if (file) {
       reader.readAsDataURL(file);
@@ -36,7 +35,7 @@ const Avatar = ({ avatarUrl, onAvatarChange }) => {
             src={avatarUrl}
             alt="Selected Avatar"
             className="avatar-image"
-            onClick={() => setShowAvatarSelection(true)} // Ermöglicht, das Avatar durch Klick zu ändern
+            onClick={() => setShowAvatarSelection(true)} 
           />
         ) : (
           <button onClick={() => setShowAvatarSelection(true)}>
@@ -44,8 +43,7 @@ const Avatar = ({ avatarUrl, onAvatarChange }) => {
           </button>
         )}
       </div>
-
-      {/* Zeige die Avatar-Auswahl nur, wenn der Benutzer sie aktiviert */}
+      {}
       {showAvatarSelection && (
         <div className="avatar-selection">
           <div className="predefined-avatars">

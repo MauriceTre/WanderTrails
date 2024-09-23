@@ -1,7 +1,6 @@
 const db = require('../db');
 const bcrypt = require('bcrypt');
 
-// User Model
 const User = {
   create: async (username, email, password, age, location) => {
     try {
@@ -29,7 +28,7 @@ const User = {
     try {
       const query = 'SELECT username, age, location FROM users WHERE id = ?';
       const [rows] = await db.promise().query(query, [userId]);
-      return rows[0]; // Gib nur den ersten Benutzer zurück
+      return rows[0]; 
     } catch (error) {
       throw error;
     }
