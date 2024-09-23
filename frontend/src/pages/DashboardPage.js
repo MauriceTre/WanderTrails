@@ -115,7 +115,7 @@ const DashboardPage = () => {
         </ul>
       </div>
 
-      {/* Beispiel für das Speichern einer Route */}
+      {}
     </div>
   );
 };

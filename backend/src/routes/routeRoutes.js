@@ -37,11 +37,11 @@ router.get('/user-routes', authenticateToken, async (req, res) => {
       try {
         return {
           route_name: route.route_name,
-          markers: JSON.parse(route.markers),
+          markers: route.markers,
         };
       } catch (parseError) {
         console.error('Fehler beim Parsen der Marker:', parseError.message);
-        return { route_name: route.route_name, markers: [] };
+        return { route_name: route.route_name, markers: route.markers };
       }
     });
 
