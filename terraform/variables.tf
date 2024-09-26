@@ -1,10 +1,10 @@
-variable "sql_admin_username" {
+variable "db_username" {
   type        = string
-  description = "SQL Server admin username"
+  description = "Username for the RDS instance"
 }
 
-variable "sql_admin_password" {
+variable "db_password" {
   type        = string
-  description = "SQL Server admin password"
+  description = "Password for the RDS instance"
   sensitive   = true
 }

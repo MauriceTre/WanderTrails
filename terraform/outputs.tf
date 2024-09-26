@@ -1,19 +1,15 @@
-output "aks_cluster_name" {
-  description = "The AKS Cluster Name"
-  value       = azurerm_kubernetes_cluster.main.name
+output "vpc_id" {
+  value = module.vpc.vpc_id
 }
 
-output "sql_server_name" {
-  description = "The SQL Server Name"
-  value       = azurerm_mssql_server.main.name
+output "frontend_service_url" {
+  value = aws_ecs_service.frontend.name
 }
 
-output "sql_database_name" {
-  description = "The SQL Database Name"
-  value       = azurerm_mssql_database.main.name
+output "backend_service_url" {
+  value = aws_ecs_service.backend.name
 }
 
-output "container_registry" {
-  description = "The Azure Container Registry"
-  value       = azurerm_container_registry.main.login_server
+output "db_instance_endpoint" {
+  value = aws_db_instance.mysql.endpoint
 }
